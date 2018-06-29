@@ -2,6 +2,7 @@ package ha.thanh.truyenhay.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,15 +16,26 @@ import ha.thanh.truyenhay.R;
  */
 
 public class IntroBookFragment extends Fragment {
+    private static final String ARG_KITTEN_NUMBER = "ahihi" ;
     private Context context;
     public static IntroBookFragment instance;
 
-    public static IntroBookFragment getInstance (){
-        if(instance == null){
-            instance = new IntroBookFragment();
-        }
-        return instance;
+//    public static IntroBookFragment getInstance (){
+//        if(instance == null){
+//            instance = new IntroBookFragment();
+//        }
+//        return instance;
+//    }
+
+
+    public static IntroBookFragment newInstance(@IntRange(from = 1, to = 6) int kittenNumber) {
+        Bundle args = new Bundle();
+        args.putInt(ARG_KITTEN_NUMBER, kittenNumber);
+        IntroBookFragment fragment = new IntroBookFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
+
 
     @Override
     public void onAttach(Context context) {

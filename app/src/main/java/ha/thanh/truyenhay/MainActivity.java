@@ -15,6 +15,7 @@ import ha.thanh.truyenhay.adapter.BookInCategoryAdapter;
 import ha.thanh.truyenhay.db.DatabaseOpenHelper;
 import ha.thanh.truyenhay.fragment.FragmentHome;
 import ha.thanh.truyenhay.model.Category;
+import ha.thanh.truyenhay.simple_fragment_to_fragment.SimpleFragmentA;
 
 public class MainActivity extends AppCompatActivity /*implements View.OnClickListener*/{
 //    private TextView tvTeenBook;

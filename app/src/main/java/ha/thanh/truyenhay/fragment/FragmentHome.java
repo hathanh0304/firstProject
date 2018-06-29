@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -23,12 +25,16 @@ import ha.thanh.truyenhay.adapter.BookInCategoryAdapter;
 import ha.thanh.truyenhay.db.DatabaseOpenHelper;
 import ha.thanh.truyenhay.model.Category;
 import ha.thanh.truyenhay.pinterface.BookClick;
+import ha.thanh.truyenhay.simple_fragment_to_fragment.SimpleFragmentA;
+import ha.thanh.truyenhay.simple_fragment_to_fragment.SimpleFragmentB;
+import ha.thanh.truyenhay.viewholder.ViewHolderBook;
 
 /**
  * Created by VCCORP on 6/29/2018.
  */
 
 public class FragmentHome extends Fragment implements BookClick, View.OnClickListener{
+    public static final String TAG = SimpleFragmentA.class.getSimpleName();
     private TextView tvTeenBook;
     private TextView tvSweetBook;
     private RecyclerView rclBookInCategory;
@@ -39,6 +45,12 @@ public class FragmentHome extends Fragment implements BookClick, View.OnClickLis
     private DatabaseOpenHelper databaseAccess;
     private Context context;
 
+    private ImageView imgTest;
+
+
+    public FragmentHome (){
+
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -90,26 +102,37 @@ public class FragmentHome extends Fragment implements BookClick, View.OnClickLis
         scrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
         tvTeenBook = (TextView) view.findViewById(R.id.tvTeenBook);
         tvSweetBook = (TextView) view.findViewById(R.id.tvSweetBook);
+//        ViewCompat.setTransitionName(imgTest,  "1_image");
     }
 
 
     @Override
-    public void onKittenClicked(BookInCategoryAdapter.ViewHolderBook holder, int position) {
-        IntroBookFragment kittenDetails = IntroBookFragment.getInstance();
-        // Note that we need the API version check here because the actual transition classes (e.g. Fade)
-        // are not in the support library and are only available in API 21+. The methods we are calling on the Fragment
-        // ARE available in the support library (though they don't do anything on API < 21)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            kittenDetails.setSharedElementEnterTransition(new DetailsTransition());
-            kittenDetails.setEnterTransition(new Fade());
-            setExitTransition(new Fade());
-            kittenDetails.setSharedElementReturnTransition(new DetailsTransition());
-        }
-        getActivity().getSupportFragmentManager()
+    public void onKittenClicked(ViewHolderBook holder, int position) {
+//        int kittenNumber = (position % 6) + 1;
+//        IntroBookFragment kittenDetails = IntroBookFragment.newInstance(kittenNumber);
+//        // Note that we need the API version check here because the actual transition classes (e.g. Fade)
+//        // are not in the support library and are only available in API 21+. The methods we are calling on the Fragment
+//        // ARE available in the support library (though they don't do anything on API < 21)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            kittenDetails.setSharedElementEnterTransition(new DetailsTransition());
+//            kittenDetails.setEnterTransition(new Fade());
+//            setExitTransition(new Fade());
+//            kittenDetails.setSharedElementReturnTransition(new DetailsTransition());
+//        }
+//        getActivity().getSupportFragmentManager()
+//                .beginTransaction()
+//                .addSharedElement(holder.imgAvatar,  "kittenImage")
+//                .replace(R.id.container, kittenDetails)
+//                .addToBackStack(null)
+//                .commit();
+
+
+        SimpleFragmentB simpleFragmentB = SimpleFragmentB.newInstance();
+        getFragmentManager()
                 .beginTransaction()
-                .addSharedElement(holder.imgAvatar,  "kittenImage")
-                .replace(R.id.container, kittenDetails)
-                .addToBackStack(null)
+                .addSharedElement(holder.imgAvatar, ViewCompat.getTransitionName(holder.imgAvatar))
+                .addToBackStack(TAG)
+                .replace(R.id.container, simpleFragmentB)
                 .commit();
     }
 
@@ -129,6 +152,10 @@ public class FragmentHome extends Fragment implements BookClick, View.OnClickLis
                 tvTeenBook.setBackgroundColor(getResources().getColor(R.color.sweet));
                 tvSweetBook.setBackgroundColor(getResources().getColor(R.color.white));
                 break;
+
+//            case R.id.imgTest:
+//
+//                break;
         }
     }
 }

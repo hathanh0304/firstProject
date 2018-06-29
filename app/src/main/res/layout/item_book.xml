@@ -3,6 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -21,6 +22,8 @@
 
 
             <ImageView
+                android:transitionName="@string/simple_fragment_transition"
+                tools:ignore="UnusedAttribute"
                 android:background="@drawable/test"
                 android:id="@+id/imgAvatar"
                 android:layout_width="140dp"

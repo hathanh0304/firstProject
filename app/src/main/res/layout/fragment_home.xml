@@ -2,10 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:orientation="vertical">
 
     <android.support.v4.widget.NestedScrollView
+        android:visibility="visible"
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -64,10 +66,26 @@
 
 
             <android.support.v7.widget.RecyclerView
+                android:clipChildren="false"
                 android:id="@+id/rclBookInCategory"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
+
+
+
+    <!--<ImageView-->
+        <!--android:scaleType="centerCrop"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:contentDescription="@string/gorilla"-->
+        <!--android:transitionName="aaa"-->
+        <!--tools:ignore="UnusedAttribute"-->
+        <!--android:id="@+id/imgTest"-->
+        <!--android:layout_marginTop="400dp"-->
+        <!--android:background="@drawable/gorilla"-->
+        <!--android:layout_width="128dp"-->
+        <!--android:layout_height="96dp" />-->
 
 </LinearLayout>
