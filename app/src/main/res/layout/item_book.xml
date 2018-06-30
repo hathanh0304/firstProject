@@ -24,7 +24,6 @@
             <ImageView
                 android:transitionName="@string/simple_fragment_transition"
                 tools:ignore="UnusedAttribute"
-                android:background="@drawable/test"
                 android:id="@+id/imgAvatar"
                 android:layout_width="140dp"
                 android:layout_height="180dp" />
