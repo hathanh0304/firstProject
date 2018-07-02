@@ -5,7 +5,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionInflater;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +18,15 @@ import android.widget.TextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
+import ha.thanh.truyenhay.MainActivity;
 import ha.thanh.truyenhay.R;
+import ha.thanh.truyenhay.activity.ReadBookActivity;
+import ha.thanh.truyenhay.adapter.PreviewBookAdapter;
+import ha.thanh.truyenhay.animation.ResizeAnimation;
+import ha.thanh.truyenhay.db.DatabaseOpenHelper;
+import ha.thanh.truyenhay.model.Story;
 
 /**
  * Created by VCCORP on 6/29/2018.
@@ -25,6 +36,12 @@ public class IntroBookFragment extends Fragment {
     private Context context;
     private static final String EXTRA_TRANSITION_NAME = "transition_name";
     private static final String EXTRA_TRANSITION_NAME1 = "transition_name1";
+    private RecyclerView rclPreview;
+    private PreviewBookAdapter previewBookAdapter;
+    private DatabaseOpenHelper databaseAccess;
+    private List<Story> stories;
+    private int height = 0;
+    private int width = 0;
 
 
     public IntroBookFragment() {
@@ -38,9 +55,15 @@ public class IntroBookFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
         }
+
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((MainActivity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        height = displayMetrics.heightPixels;
+        width = displayMetrics.widthPixels;
     }
 
-    public static IntroBookFragment newInstance( String transitionName, String transitionName1 ) {
+    public static IntroBookFragment newInstance(String transitionName, String transitionName1) {
         IntroBookFragment animalDetailFragment = new IntroBookFragment();
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_TRANSITION_NAME, transitionName);
@@ -73,7 +96,8 @@ public class IntroBookFragment extends Fragment {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                (getActivity()).onBackPressed();
+//                (getActivity()).onBackPressed();
+                reSize();
             }
         });
         String transitionName = getArguments().getString(EXTRA_TRANSITION_NAME);
@@ -99,11 +123,33 @@ public class IntroBookFragment extends Fragment {
                 });
         text.setText(transitionName1);
     }
+
     private void initData() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rclPreview.setLayoutManager(layoutManager);
+        databaseAccess = new DatabaseOpenHelper(context);
+        databaseAccess.openDataBase();
+        stories = databaseAccess.getAllChapter("1");
+        previewBookAdapter = new PreviewBookAdapter(stories);
+        rclPreview.setAdapter(previewBookAdapter);
+
 
     }
-    private void initView(View view) {
 
+    private void initView(View view) {
+        rclPreview = (RecyclerView) view.findViewById(R.id.rclPreview);
+    }
+
+
+    private void reSize() {
+        ResizeAnimation resizeAnimation = new ResizeAnimation(
+                rclPreview,
+                400,
+                400, width, height
+        );
+        resizeAnimation.setDuration(500);
+        rclPreview.startAnimation(resizeAnimation);
     }
 
 

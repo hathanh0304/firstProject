@@ -15,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.util.List;
+
 import ha.thanh.truyenhay.R;
 import ha.thanh.truyenhay.activity.ReadBookActivity;
 import ha.thanh.truyenhay.adapter.BookRecentGalleryAdapter;
@@ -29,7 +31,7 @@ import ha.thanh.truyenhay.pinterface.BookRecentItemClickListener;
  * Created by VCCORP on 6/29/2018.
  */
 
-public class FragmentHome extends Fragment implements View.OnClickListener, BookItemClickListener , BookRecentItemClickListener {
+public class FragmentHome extends Fragment implements View.OnClickListener, BookItemClickListener, BookRecentItemClickListener {
     public static final String TAG = FragmentHome.class.getSimpleName();
     private TextView tvTeenBook;
     private TextView tvSweetBook;
@@ -40,6 +42,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, Book
     private Context context;
     private BookGalleryAdapter animalGalleryAdapter;
     private BookRecentGalleryAdapter bookRecentGalleryAdapter;
+    private List<Category> categories;
 
     public FragmentHome() {
 
@@ -64,7 +67,9 @@ public class FragmentHome extends Fragment implements View.OnClickListener, Book
     private void initData() {
         databaseAccess = new DatabaseOpenHelper(context);
         databaseAccess.openDataBase();
-        List<Category> categories = databaseAccess.getAllBook();
+        if (categories == null) {
+            categories = databaseAccess.getAllBook();
+        }
         animalGalleryAdapter = new BookGalleryAdapter(categories, this);
         bookRecentGalleryAdapter = new BookRecentGalleryAdapter(categories, this);
         rclBookInCategory.setAdapter(animalGalleryAdapter);

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ha.thanh.truyenhay.model.Category;
+import ha.thanh.truyenhay.model.Story;
 
 
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
@@ -155,6 +156,35 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     category.setCatName(cursor.getString(1));
                     //Adding contact to list
                     list.add(category);
+                } while (cursor.moveToNext());
+            }
+        }
+        cursor.close();
+        return list;
+    }
+
+    public List<Story> getAllChapter(String catId) {
+        //Open connection to read only
+        database = this.getWritableDatabase();
+        List<Story> list = new ArrayList<>();
+
+        String selectQuery = "select id, catId, title from udv_story where catId = "+catId+"";
+
+
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor == null) {
+            return null;
+        } else {
+            // looping through all rows and adding to list
+            if (cursor.moveToFirst()) {
+                do {
+                    Story story = new Story();
+                    story.setCatId(cursor.getString(0));
+                    story.setCatId(cursor.getString(1));
+                    story.setTitle(cursor.getString(2));
+                    //Adding contact to list
+                    list.add(story);
                 } while (cursor.moveToNext());
             }
         }
