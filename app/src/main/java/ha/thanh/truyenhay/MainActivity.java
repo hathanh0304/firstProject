@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import ha.thanh.truyenhay.fragment.FragmentHome;
 
 public class MainActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -6,12 +6,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.transition.TransitionInflater;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +31,8 @@ import ha.thanh.truyenhay.adapter.PreviewBookAdapter;
 import ha.thanh.truyenhay.animation.ResizeAnimation;
 import ha.thanh.truyenhay.db.DatabaseOpenHelper;
 import ha.thanh.truyenhay.model.Story;
+import ha.thanh.truyenhay.util.CustomLinearLayoutManager;
+import ha.thanh.truyenhay.util.System;
 
 /**
  * Created by VCCORP on 6/29/2018.
@@ -36,12 +42,16 @@ public class IntroBookFragment extends Fragment {
     private Context context;
     private static final String EXTRA_TRANSITION_NAME = "transition_name";
     private static final String EXTRA_TRANSITION_NAME1 = "transition_name1";
-    private RecyclerView rclPreview;
+    public RecyclerView rclPreview;
     private PreviewBookAdapter previewBookAdapter;
     private DatabaseOpenHelper databaseAccess;
     private List<Story> stories;
-    private int height = 0;
-    private int width = 0;
+    public int mode = 0;
+    public CustomLinearLayoutManager layoutManager;
+    private int firstCompletely;
+    private int lastCompletely;
+    private int firstVisibleItemPosition;
+    private int lastVisibleItemPosition;
 
 
     public IntroBookFragment() {
@@ -59,8 +69,8 @@ public class IntroBookFragment extends Fragment {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((MainActivity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        height = displayMetrics.heightPixels;
-        width = displayMetrics.widthPixels;
+        System.height = displayMetrics.heightPixels;
+        System.width = displayMetrics.widthPixels;
     }
 
     public static IntroBookFragment newInstance(String transitionName, String transitionName1) {
@@ -96,8 +106,7 @@ public class IntroBookFragment extends Fragment {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                (getActivity()).onBackPressed();
-                reSize();
+                (getActivity()).onBackPressed();
             }
         });
         String transitionName = getArguments().getString(EXTRA_TRANSITION_NAME);
@@ -125,14 +134,17 @@ public class IntroBookFragment extends Fragment {
     }
 
     private void initData() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager = new CustomLinearLayoutManager(context);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rclPreview.setLayoutManager(layoutManager);
         databaseAccess = new DatabaseOpenHelper(context);
         databaseAccess.openDataBase();
         stories = databaseAccess.getAllChapter("1");
-        previewBookAdapter = new PreviewBookAdapter(stories);
+        previewBookAdapter = new PreviewBookAdapter(stories, context, IntroBookFragment.this);
         rclPreview.setAdapter(previewBookAdapter);
+
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(rclPreview);
 
 
     }
@@ -143,13 +155,13 @@ public class IntroBookFragment extends Fragment {
 
 
     private void reSize() {
-        ResizeAnimation resizeAnimation = new ResizeAnimation(
-                rclPreview,
-                400,
-                400, width, height
-        );
-        resizeAnimation.setDuration(500);
-        rclPreview.startAnimation(resizeAnimation);
+//        ResizeAnimation resizeAnimation = new ResizeAnimation(
+//                rclPreview,
+//                400,
+//                400, width, height
+//        );
+//        resizeAnimation.setDuration(500);
+//        rclPreview.startAnimation(resizeAnimation);
     }
 
 

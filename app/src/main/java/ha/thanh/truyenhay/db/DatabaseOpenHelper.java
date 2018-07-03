@@ -168,7 +168,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         database = this.getWritableDatabase();
         List<Story> list = new ArrayList<>();
 
-        String selectQuery = "select id, catId, title from udv_story where catId = "+catId+"";
+        String selectQuery = "select * from udv_story where catId = "+catId+"";
 
 
         Cursor cursor = database.rawQuery(selectQuery, null);
@@ -183,6 +183,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     story.setCatId(cursor.getString(0));
                     story.setCatId(cursor.getString(1));
                     story.setTitle(cursor.getString(2));
+                    story.setDetail(cursor.getString(3));
                     //Adding contact to list
                     list.add(story);
                 } while (cursor.moveToNext());
